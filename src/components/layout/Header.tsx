@@ -1,22 +1,14 @@
 import { Button } from "flowbite-react";
-import { useState } from "react";
 import { Link } from "react-router-dom";
 
-import Login from "@/blocks/Login";
 import { Container } from "@/layout/index";
-import { Drawer, Logo } from "@/ui/index";
+import { Logo } from "@/ui/index";
 
 const menuList = [
   { name: "About us", link: "about" },
   { name: "Shop", link: "shop" },
 ];
 const Header = () => {
-  const [showDrawer, setShowDrawer] = useState(false);
-
-  const loginHandle = () => {
-    setShowDrawer(!showDrawer);
-  };
-
   const MenuItem = ({ name, link }: { name: string; link: string }) => {
     return (
       <li>
@@ -42,9 +34,6 @@ const Header = () => {
           <Button color="info">Login</Button>
         </Container>
       </header>
-      <Drawer isOpen={showDrawer} onClose={setShowDrawer}>
-        <Login />
-      </Drawer>
     </>
   );
 };

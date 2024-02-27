@@ -1,4 +1,3 @@
-import LoginPage from "@/blocks/Login";
 import { ProductDetail, Home, Shop, About } from "@/pages/index";
 
 export const basicPaths = [
@@ -11,7 +10,7 @@ export const basicPaths = [
     path: "shop",
     id: 2,
     element: <Shop />,
-    children: [{ id: 2.1, path: "login", element: <LoginPage /> }],
+    children: [{ id: 2.1, path: "login", element: <Shop /> }],
   },
   {
     path: "shop/:id",

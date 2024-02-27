@@ -8,7 +8,7 @@ import { Pagination } from "@/ui/index";
 const Home = () => {
   const { products, isLoading } = useFetchedProducts();
   const { filteredProducts, isFilterLoading, hasFilterParams } = useFilterProducts();
-
+  console.log(isFilterLoading);
   return (
     <Container className="text-center py-10">
       <SearchByTitle />

@@ -5,6 +5,7 @@ import { useLazyFilterItemsQuery, useLazyGetItemsQuery } from "@/store/services/
 
 const useFilterProducts = () => {
   const [searchParams] = useSearchParams();
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const [hasFilterParams, setHasFilterParams] = useState(false);
   const [filteredProducts, setFilteredProducts] = useState<Model.Product[]>([]);
 
@@ -22,11 +23,8 @@ const useFilterProducts = () => {
       brandParam && brandParam.length > 0 ? (params.brand = brandParam) : null;
       Number(priceParam) > 0 ? (params.price = Number(priceParam)) : null;
       titleParam && titleParam?.length > 3 ? (params.title = titleParam) : null;
-
-      setTimeout(() => {
-        triggerIds({ ...params });
-        setHasFilterParams(true);
-      }, 500);
+      triggerIds({ ...params });
+      setHasFilterParams(true);
     } else {
       setHasFilterParams(false);
     }
@@ -35,7 +33,10 @@ const useFilterProducts = () => {
   useEffect(() => {
     if (triggeredIds.data && triggeredIds.isSuccess) {
       const ids = (triggeredIds.data as { result: string[] }).result;
-      triggerProducts({ ids });
+      setIsLoading(true);
+      setTimeout(() => {
+        triggerProducts({ ids });
+      }, 500);
     }
   }, [triggeredIds, triggerProducts]);
 
@@ -48,10 +49,11 @@ const useFilterProducts = () => {
         );
         setFilteredProducts(uniqueProducts);
       }
+      setIsLoading(false);
     }
   }, [triggeredProducts]);
 
-  return { filteredProducts, isFilterLoading: triggeredProducts.isLoading || triggeredIds.isLoading, hasFilterParams };
+  return { filteredProducts, isFilterLoading: isLoading, hasFilterParams };
 };
 
 export default useFilterProducts;
