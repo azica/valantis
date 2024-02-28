@@ -82,18 +82,20 @@ export const ShopService = {
   async filterItems({
     price,
     brand,
-    title,
+    product,
+    offset,
   }: {
     price?: number;
     brand?: string;
-    title?: string;
+    product?: string;
+    offset?: number;
   }): Promise<{ result: string[] } | { error?: ErrorResponse }> {
     try {
       const response = await axios.post(
         SHOP_API_URL,
         {
           action: "filter",
-          params: { price, brand, title },
+          params: { price, brand, product, offset },
         },
         {
           headers: authHeader,

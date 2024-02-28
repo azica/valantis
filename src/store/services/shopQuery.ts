@@ -46,11 +46,11 @@ const extendedApi = apiWithTag.injectEndpoints({
     }),
     filterItems: builder.query<
       { result: string[] } | { error?: ErrorResponse },
-      { price?: number; brand?: string; title?: string }
+      { price?: number; brand?: string; product?: string; offset?: number }
     >({
-      queryFn: async ({ price, brand, title }) => {
+      queryFn: async ({ price, brand, product, offset }) => {
         try {
-          const res = await ShopService.filterItems({ price, brand, title });
+          const res = await ShopService.filterItems({ price, brand, product, offset });
           return { data: res };
         } catch (error: any) {
           return { error: error.message, status: error.status };

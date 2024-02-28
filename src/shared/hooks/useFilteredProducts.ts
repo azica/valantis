@@ -1,3 +1,4 @@
+import { enqueueSnackbar } from "notistack";
 import { useState, useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
 
@@ -15,18 +16,24 @@ const useFilterProducts = () => {
   useEffect(() => {
     const priceParam = searchParams.get("price");
     const brandParam = searchParams.get("brand");
-    const titleParam = searchParams.get("title");
+    const productParam = searchParams.get("product");
+    const page = searchParams.get("page");
 
-    if (priceParam !== null || brandParam !== null || titleParam !== null) {
-      const params: { price?: number; brand?: string; title?: string } = {};
-
-      brandParam && brandParam.length > 0 ? (params.brand = brandParam) : null;
-      Number(priceParam) > 0 ? (params.price = Number(priceParam)) : null;
-      titleParam && titleParam?.length > 3 ? (params.title = titleParam) : null;
-      triggerIds({ ...params });
+    if (priceParam !== null || brandParam !== null || productParam !== null) {
       setHasFilterParams(true);
     } else {
       setHasFilterParams(false);
+    }
+
+    if (priceParam !== null || brandParam !== null || productParam !== null || page !== null) {
+      const params: { price?: number; brand?: string; product?: string; offset?: number } = {};
+
+      brandParam && brandParam.length > 0 ? (params.brand = brandParam) : null;
+      Number(priceParam) > 0 ? (params.price = Number(priceParam)) : null;
+      productParam && productParam?.length > 3 ? (params.product = productParam) : null;
+      page ? (params.offset = (Number(page) - 1) * 10) : null;
+
+      triggerIds({ ...params });
     }
   }, [searchParams, triggerIds]);
 
@@ -37,6 +44,12 @@ const useFilterProducts = () => {
       setTimeout(() => {
         triggerProducts({ ids });
       }, 500);
+    }
+    if (triggeredIds.error) {
+      enqueueSnackbar((triggeredIds.error as ErrorResponse).message || "An error occurred while fetching products!", {
+        variant: "failure",
+        autoHideDuration: 3000,
+      });
     }
   }, [triggeredIds, triggerProducts]);
 
@@ -50,6 +63,12 @@ const useFilterProducts = () => {
         setFilteredProducts(uniqueProducts);
       }
       setIsLoading(false);
+    }
+    if (triggeredProducts.error) {
+      enqueueSnackbar((triggeredProducts.error as ErrorResponse).message || "An error occurred while fetching products!", {
+        variant: "failure",
+        autoHideDuration: 3000,
+      });
     }
   }, [triggeredProducts]);
 

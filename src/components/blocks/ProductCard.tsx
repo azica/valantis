@@ -2,8 +2,6 @@ import type { FC } from "react";
 
 import { Button, Card } from "flowbite-react";
 
-import ring from "@/assets/images/ring.webp";
-
 const ProductCard: FC<Model.Product> = ({ product, id, brand, price }) => {
   return (
     <Card className="max-w-sm">
